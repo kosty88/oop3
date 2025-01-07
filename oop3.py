@@ -93,6 +93,40 @@ class Reviewer(Mentor):
         return res
 
 
+def grades_students(students_list, course):
+    overall_student_rating = 0
+    lectors = 0
+    for listener in students_list:
+        if course in listener.grades.keys():
+            average_student_score = 0
+            for grades in listener.grades[course]:
+                average_student_score += grades
+            overall_student_rating = average_student_score / len(listener.grades[course])
+            average_student_score += overall_student_rating
+            lectors += 1
+    if overall_student_rating == 0:
+        return f'Оценок по этому предмету нет'
+    else:
+        return f'{overall_student_rating / lectors:.2f}'
+
+
+def grades_lecturers(lecturer_list, course):
+    average_rating = 0
+    b = 0
+    for lecturer in lecturer_list:
+        if course in lecturer.rates.keys():
+            lecturer_average_rates = 0
+            for rate in lecturer.rates[course]:
+                lecturer_average_rates += rate
+            overall_lecturer_average_rates = lecturer_average_rates / len(lecturer.rates[course])
+            average_rating += overall_lecturer_average_rates
+            b += 1
+    if average_rating == 0:
+        return f'Оценок по этому предмету нет'
+    else:
+        return f'{average_rating / b:.2f}'
+
+
 student_1 = Student('Иван', 'Иванов', 'Male')
 student_1.finished_courses = ['Python', 'C++']
 student_1.courses_in_progress = ['Git', 'Java']
@@ -173,3 +207,11 @@ if lecturer_1 > lecturer_2:
     print(f'{lecturer_1.name, lecturer_1.surname} преподает лучше чем {lecturer_2.name, lecturer_2.surname}')
 else:
     print(f'{lecturer_2.name, lecturer_2.surname} преподает лучше чем {lecturer_1.name, lecturer_1.surname}')
+
+print(f'Средняя оценка студентов по курсу "Git": {grades_students(students_list, "Git")}')
+print(f'Средняя оценка студентов по курсу "Java": {grades_students(students_list, "Java")}')
+print(f'Средняя оценка студентов по курсу "Python": {grades_students(students_list, "Python")}')
+
+print(f'Средняя оценка лекторов по курсу "Git": {grades_lecturers(lecturer_list, "Git")}')
+print(f'Средняя оценка лекторов по курсу "Java": {grades_lecturers(lecturer_list, "Java")}')
+print(f'Средняя оценка лекторов по курсу "Python": {grades_lecturers(lecturer_list, "Python")}')
